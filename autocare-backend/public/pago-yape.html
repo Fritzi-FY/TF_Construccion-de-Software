@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pago con Yape - AutoCare</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; }
+    .card { border: 1px solid #ddd; padding: 1.5rem; border-radius: 8px; }
+    .btn { padding: .7rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; }
+    .btn-primary { background: #5c6bc0; color: #fff; }
+    pre { background: #f7f7f7; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Pago con Yape vía Izipay</h1>
+    <p>Esta página de prueba llama a la API <code>/api/pagos/yape</code> y muestra la configuración de pago que luego usará el formulario de Izipay.</p>
+
+    <label for="orderId">ID de Orden:</label>
+    <input type="number" id="orderId" value="7" />
+
+    <button id="btnPagar" class="btn btn-primary">Iniciar pago con Yape</button>
+
+    <h2>Respuesta de la API</h2>
+    <pre id="respuestaApi">[Aún sin respuesta]</pre>
+  </div>
+
+  <script>
+    const btn = document.getElementById('btnPagar');
+    const pre = document.getElementById('respuestaApi');
+    const orderInput = document.getElementById('orderId');
+
+    btn.addEventListener('click', async () => {
+      const orderId = parseInt(orderInput.value, 10);
+
+      if (!orderId) {
+        alert('Ingresa un ID de orden válido');
+        return;
+      }
+
+      try {
+        const resp = await fetch('http://localhost:3000/api/pagos/yape', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ orderId })
+        });
+
+        const data = await resp.json();
+        pre.textContent = JSON.stringify(data, null, 2);
+
+        if (!resp.ok) {
+          alert('Error desde la API: ' + (data.error || 'desconocido'));
+          return;
+        }
+
+        // Aquí en el futuro inicializarás el formulario de Izipay usando data.configPago
+        console.log('ConfigPago listo para Izipay:', data.configPago);
+      } catch (err) {
+        console.error(err);
+        pre.textContent = 'Error de red o del servidor';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -8,11 +8,11 @@ class RepositorioOrdenesSql {
       .input('id', orderId)
       .query(`
         SELECT id,
-               numero_orden,
-               user_id,
-               monto_total,
-               estado_pago,
-               estado_orden
+              numero_orden,
+              user_id,
+              monto_total,
+              estado_pago,
+              estado_orden
         FROM orders
         WHERE id = @id
       `);
