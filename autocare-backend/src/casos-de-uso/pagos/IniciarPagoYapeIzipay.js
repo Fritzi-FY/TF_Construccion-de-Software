@@ -29,7 +29,12 @@ class IniciarPagoYapeIzipay {
 
     // 3. Llamar a la pasarela (IzipayAdapter)
     const { configPago, pagoActualizado } = await this.servicioPasarela.iniciarPagoYape(orden, pago);
-
+    // Actualizar orden con número de transacción
+    await this.repoOrdenes.actualizarPagoPendiente(
+      orden.id,
+      pagoActualizado.referenciaPasarela // transactionId que generó el adapter
+    );
+    
     // 4. Registrar transacción en BD
     const { id } = await this.repoTransacciones.registrarTransaccionPago(pagoActualizado);
     pagoActualizado.id = id;

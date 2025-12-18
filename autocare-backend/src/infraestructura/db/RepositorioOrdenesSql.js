@@ -12,11 +12,26 @@ class RepositorioOrdenesSql {
               user_id,
               monto_total,
               estado_pago,
-              estado_orden
+              estado_orden,
+              numero_transaccion
         FROM orders
         WHERE id = @id
       `);
     return result.recordset[0] || null;
+  }
+
+  async actualizarPagoPendiente(orderId, numeroTransaccion) {
+  const pool = await poolPromise;
+  await pool.request()
+    .input('id', orderId)
+    .input('numero_transaccion', numeroTransaccion)
+    .query(`
+      UPDATE orders
+      SET
+        estado_pago = 'pendiente',
+        numero_transaccion = @numero_transaccion
+      WHERE id = @id
+    `);
   }
 }
 

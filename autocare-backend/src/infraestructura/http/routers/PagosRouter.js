@@ -35,4 +35,31 @@ router.post('/yape', async (req, res) => {
   }
 });
 
+// GET /api/pagos/orden/:id  -> Ver estado de pago de una orden
+router.get('/orden/:id', async (req, res) => {
+  try {
+    const orderId = parseInt(req.params.id, 10);
+    if (!orderId) {
+      return res.status(400).json({ error: 'id de orden inválido' });
+    }
+
+    const orden = await repoOrdenes.obtenerPorId(orderId);
+    if (!orden) {
+      return res.status(404).json({ error: 'Orden no encontrada' });
+    }
+
+    return res.json({
+      orderId: orden.id,
+      numeroOrden: orden.numero_orden,
+      estadoPago: orden.estado_pago,
+      estadoOrden: orden.estado_orden,
+      numeroTransaccion: orden.numero_transaccion
+    });
+  } catch (err) {
+    console.error('Error al consultar estado de pago:', err);
+    return res.status(500).json({ error: 'No se pudo consultar el estado de pago' });
+  }
+
+});
+
 module.exports = router;
