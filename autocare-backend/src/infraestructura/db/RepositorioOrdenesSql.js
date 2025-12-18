@@ -1,16 +1,25 @@
 // Ejemplo usando un pool SQL genérico (puede ser mssql, mysql2, etc.)
-const db = require('../../config/db'); // ajusta ruta/nombre según tu proyecto
+const { poolPromise } = require('../../config/db');
 
 class RepositorioOrdenesSql {
   async obtenerPorId(orderId) {
-    const query = `
-      SELECT id, numeroorden, userid, montototal, estadopago, estadoorden
-      FROM orders
-      WHERE id = @id
-    `;
-    const result = await db.query(query, { id: orderId }); // adapta a tu librería SQL
-    return result[0] || null;
+    const pool = await poolPromise;
+    const result = await pool.request()
+      .input('id', orderId)
+      .query(`
+        SELECT id,
+               numero_orden,
+               user_id,
+               monto_total,
+               estado_pago,
+               estado_orden
+        FROM orders
+        WHERE id = @id
+      `);
+    return result.recordset[0] || null;
   }
 }
 
 module.exports = RepositorioOrdenesSql;
+
+

@@ -13,15 +13,15 @@ class IniciarPagoYapeIzipay {
     if (!orden) {
       throw new Error('Orden no encontrada');
     }
-    if (orden.estadopago !== 'pendiente') {
+    if (orden.estado_pago !== 'pendiente') {
       throw new Error('La orden no está pendiente de pago');
     }
 
     // 2. Crear entidad Pago
     const pago = new Pago({
       orderId: orden.id,
-      userId: orden.userid || userId,
-      monto: orden.montototal,
+      userId: orden.user_id,
+      monto: orden.monto_total,
       moneda: 'PEN',
       metodo: 'yape_izipay',
       estado: 'pendiente'
@@ -38,7 +38,7 @@ class IniciarPagoYapeIzipay {
     return {
       transaccionId: id,
       orderId: orden.id,
-      numeroOrden: orden.numeroorden,
+      numeroOrden: orden.numero_orden,
       configPago
     };
   }
