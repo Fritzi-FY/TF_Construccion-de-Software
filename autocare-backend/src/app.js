@@ -1,24 +1,31 @@
 require('dotenv').config();
 const express = require('express');
 const { poolPromise } = require('./config/db');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const pagosRouter = require('./infraestructura/http/routers/PagosRouter');
+// Routers
+const pagosRouter    = require('./infraestructura/http/routers/PagosRouter');
+const checkoutRouter = require('./infraestructura/http/routers/CheckoutRouter');
+const ordenesRouter  = require('./infraestructura/http/routers/OrdenesRouter'); // ← nuevo
 
+app.use(express.json());
 
-const path = require('path'); // Módulo para manejar rutas de archivos
+// Rutas API
+app.use('/api/pagos', pagosRouter);   // /api/pagos/...
+app.use('/api', checkoutRouter);      // /api/checkout
+app.use('/api', ordenesRouter);       // /api/ordenes
 
-app.use(express.json()); // Middleware para parsear JSON
-app.use('/api/pagos', pagosRouter); // Rutas para pagos
+// Archivos estáticos
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use(express.static(path.join(__dirname,'..', 'public'))); // Carpeta para archivos estáticos
-
+// Ruta de prueba
 app.get('/', async (req, res) => {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query('SELECT TOP 1 * FROM products'); // tabla de tu script
+    const result = await pool.request().query('SELECT TOP 1 * FROM products');
     res.json({ ok: true, productoEjemplo: result.recordset[0] || null });
   } catch (err) {
     console.error(err);
@@ -29,4 +36,5 @@ app.get('/', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
 });
+
 

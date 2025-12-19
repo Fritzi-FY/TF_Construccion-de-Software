@@ -218,7 +218,7 @@
 
                     <div class="action-buttons">
                         <a href="carrito.html" class="btn-cancel">← Atrás</a>
-                        <a href="pago-yape.html" class="btn-confirm">Continuar →</a>
+                        <button class="btn-confirm" onclick="continuarCheckout()">Continuar →</button>
                     </div>
 
                     <div class="faq">
@@ -310,6 +310,71 @@
         }
 
         document.addEventListener('DOMContentLoaded', updateOrderSummary);
+
+
+    async function continuarCheckout() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName  = document.getElementById('lastName').value.trim();
+        const email     = document.getElementById('email').value.trim();
+        const phone     = document.getElementById('phone').value.trim();
+        const dni       = document.getElementById('dni').value.trim();
+
+        const address   = document.getElementById('address').value.trim();
+        const city      = document.getElementById('city').value.trim();
+        const state     = document.getElementById('state').value.trim();
+        const zip       = document.getElementById('zip').value.trim();
+        const country   = document.getElementById('country').value;
+        const instructions = document.getElementById('instructions').value.trim();
+
+        if (!firstName || !lastName || !email || !phone || !dni ||
+            !address || !city || !state || !zip || !country) {
+            alert('Completa todos los campos obligatorios');
+            return;
+        }
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert('Tu carrito está vacío');
+            return;
+        }
+
+        const cartMap = {};
+        cart.forEach(item => {
+            if (!cartMap[item.id]) {
+            cartMap[item.id] = { id: item.id, quantity: 0 };
+            }
+            cartMap[item.id].quantity++;
+        });
+        const carrito = Object.values(cartMap);
+
+        const cliente = { firstName, lastName, email, phone, dni };
+        const direccion = { address, city, state, zip, country, instructions };
+
+        try {
+            const resp = await fetch('http://localhost:3000/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cliente, direccion, carrito })
+            });
+
+            const data = await resp.json();
+
+            if (!resp.ok) {
+            alert('Error en checkout: ' + (data.error || 'desconocido'));
+            return;
+            }
+
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('addressId', data.addressId);
+
+            window.location.href = 'pago-yape.html';
+        } catch (err) {
+            console.error(err);
+            alert('Error de red al procesar checkout');
+        }
+        }
+
+
     </script>
 </body>
 </html>

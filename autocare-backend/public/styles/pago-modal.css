@@ -1,4 +1,5 @@
 /* Botones del modal */
+/* Botones del modal */
 .btn {
   padding: 0.6rem 1.2rem;
   border: none;
@@ -6,8 +7,42 @@
   cursor: pointer;
   margin-right: 0.5rem;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #ffffff;              /* texto blanco para todos */
 }
+
+/* 1. Iniciar pago */
+#btnIniciar {
+  background-color: #16a34a;   /* verde */
+}
+#btnIniciar:hover {
+  background-color: #15803d;
+}
+
+/* 2. Confirmar pago */
+#btnConfirmar {
+  background-color: #2563eb;   /* azul */
+}
+#btnConfirmar:hover {
+  background-color: #1d4ed8;
+}
+
+/* 3. Consultar estado */
+#btnEstado {
+  background-color: #f59e0b;   /* naranja/ámbar */
+}
+#btnEstado:hover {
+  background-color: #d97706;
+}
+
+/* 4. Finalizar compra */
+#btnFinalizar {
+  background-color: #7c3aed;   /* morado */
+}
+#btnFinalizar:hover {
+  background-color: #6d28d9;
+}
+/* Estilos comunes para botones primarios y secundarios */
 .btn-primary {
   background: #4f46e5;
   color: #fff;

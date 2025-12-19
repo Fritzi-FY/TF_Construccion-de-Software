@@ -202,8 +202,15 @@
         }
 
         function applyPromo() {
-            alert('Código promocional aplicado');
+        const code = document.getElementById('promoCode').value.trim();
+        if (!code) {
+            alert('Ingresa un código promocional');
+            return;
         }
+        localStorage.setItem('promoCode', code);
+        alert('Código promocional aplicado: ' + code);
+}
+
 
         document.addEventListener('DOMContentLoaded', renderCart);
     </script>

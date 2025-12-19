@@ -132,7 +132,7 @@
 
           <div class="methods-grid" style="display: grid; gap: 0.75rem;">
             <label class="method-card">
-              <input type="radio" name="paymentMethod" value="yape" checked>
+              <input type="radio" name="paymentMethod" value="efectivo" checked>
               <div style="text-align: left;">
                 <strong>💳 Yape</strong>
                 <p style="font-size: 0.85rem; color: #7f8c8d; margin: 0;">Billetera digital peruana</p>
@@ -250,6 +250,9 @@
       <button id="btnEstado" class="btn">
         3. Consultar estado
       </button>
+      <button id="btnFinalizar" class="btn btn-primary">
+        4. Finalizar compra
+      </button>
     </div>
 
     <!-- SOLO UN PRE EN TODO EL DOCUMENTO -->
@@ -333,14 +336,72 @@
     }
 
     // AHORA confirmPayment abre el modal en vez de redirigir
-    function confirmPayment() {
-      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-      if (paymentMethod !== 'yape') {
-        alert('Por ahora solo se ha implementado la simulación para Yape.');
-        return;
+      async function confirmPayment() {
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+        const subtotalText = document.getElementById('detailSubtotal').textContent.replace('S/','').trim();
+        const igvText      = document.getElementById('detailIGV').textContent.replace('S/','').trim();
+        const envioText    = document.getElementById('detailShipping').textContent.replace('S/','').trim();
+        const totalText    = document.getElementById('detailTotal').textContent.replace('S/','').trim();
+
+        const subtotal = parseFloat(subtotalText) || 0;
+        const igv      = parseFloat(igvText) || 0;
+        const envio    = parseFloat(envioText) || 0;
+        const total    = parseFloat(totalText) || 0;
+
+        const userId    = parseInt(localStorage.getItem('userId'), 10);
+        const addressId = parseInt(localStorage.getItem('addressId'), 10);
+        const promoCode = localStorage.getItem('promoCode') || null;
+
+        if (!userId || !addressId) {
+          alert('Faltan datos de checkout (usuario/dirección). Vuelve al paso anterior.');
+          return;
+        }
+
+        // SIEMPRE usar un método permitido por la constraint (por ejemplo 'tarjeta')
+        let metodoPagoDb = 'tarjeta';
+
+        try {
+          const resp = await fetch('http://localhost:3000/api/ordenes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              addressId,
+              subtotal,
+              igv,
+              envio,
+              total,
+              promoCode,
+              metodoPago: metodoPagoDb
+            })
+          });
+
+          const data = await resp.json();
+
+          if (!resp.ok) {
+            alert('Error al crear la orden: ' + (data.error || 'desconocido'));
+            return;
+          }
+
+          const orderId = data.orderId;
+          ultimoOrderId = orderId;
+
+          // SIEMPRE abrir el pop‑out con los 3 botones (aunque en la UI diga Yape)
+          document.getElementById('orderId').value = orderId;
+          modal.style.display = 'block';
+
+          const pre = document.getElementById('respuestaApi');
+          pre.textContent = 'ORDEN CREADA:\n' + JSON.stringify(data, null, 2);
+
+        } catch (err) {
+          console.error(err);
+          alert('Error de red al crear la orden');
+        }
       }
-      modal.style.display = 'block';
-    }
+
+
+
 
     function showError(message) {
       const errorMsg = document.getElementById('errorMsg');
@@ -367,6 +428,7 @@ const pre = document.getElementById('respuestaApi');
 const btnIniciar = document.getElementById('btnIniciar');
 const btnConfirmar = document.getElementById('btnConfirmar');
 const btnEstado = document.getElementById('btnEstado');
+const btnFinalizar = document.getElementById('btnFinalizar');
 
 let ultimoOrderId = null;
 
@@ -394,6 +456,35 @@ btnIniciar.addEventListener('click', async () => {
     pre.textContent = 'Error de red al iniciar pago';
   }
 });
+
+btnFinalizar.addEventListener('click', async () => {
+  const orderId = ultimoOrderId || parseInt(orderInput.value, 10);
+  if (!orderId) {
+    alert('No hay una orden asociada. Primero crea e inicia el pago.');
+    return;
+  }
+
+  try {
+    // Consulta final del estado para mostrarlo en el JSON
+    const resp = await fetch('http://localhost:3000/api/pagos/orden/' + orderId);
+    const data = await resp.json();
+
+    pre.textContent = 'RESUMEN FINAL:\n' + JSON.stringify(data, null, 2);
+
+    if (!resp.ok) {
+      alert('Error al obtener el estado final: ' + (data.error || 'desconocido'));
+      return;
+    }
+
+    // Mensaje y redirección al home
+    alert('Compra finalizada para la orden ' + orderId + '. Serás redirigido al inicio.');
+    window.location.href = 'index.html';
+  } catch (err) {
+    console.error(err);
+    pre.textContent = 'Error de red al finalizar compra';
+  }
+});
+
 
 btnConfirmar.addEventListener('click', async () => {
   if (!ultimoOrderId) {
