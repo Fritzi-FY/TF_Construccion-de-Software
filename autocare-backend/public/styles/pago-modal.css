@@ -1,0 +1,118 @@
+/* Botones del modal */
+.btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.btn-primary {
+  background: #4f46e5;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #4338ca;
+}
+.btn-secondary {
+  background: #6b7280;
+  color: #fff;
+}
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+/* Respuesta API (debug) */
+#respuestaApi {
+  background: #0b1120;        /* fondo oscuro o el que prefieras */
+  color: #e5e7eb;             /* texto gris claro legible */
+  padding: 0.8rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-top: 1rem;
+  border: 1px solid #1f2937;
+  font-size: 0.8rem;
+  max-height: 220px;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+
+/* Overlay del modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+/* Contenedor centrado del modal */
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 1.75rem 1.75rem 1.5rem;
+  border-radius: 14px;
+  width: 95%;
+  max-width: 480px;
+  box-shadow:
+    0 10px 25px rgba(15, 23, 42, 0.20),
+    0 0 0 1px rgba(148, 163, 184, 0.25);
+  box-sizing: border-box;
+}
+
+/* Header del modal */
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Texto dentro del modal */
+.modal-content p {
+  margin: 0.5rem 0 1rem;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+/* Input del orderId */
+#orderId {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+#orderId:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.35);
+}
+
+/* Fila de botones */
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* Botón de cierre (X) */
+.close {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #9ca3af;
+}
+.close:hover {
+  color: #4b5563;
+}

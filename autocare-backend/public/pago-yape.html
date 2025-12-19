@@ -1,122 +1,441 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pago con Yape - AutoCare</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 700px; margin: 2rem auto; }
-    .card { border: 1px solid #ddd; padding: 1.5rem; border-radius: 8px; }
-    .btn { padding: .7rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; margin-right: .5rem; }
-    .btn-primary { background: #5c6bc0; color: #fff; }
-    .btn-secondary { background: #9e9e9e; color: #fff; }
-    pre { background: #f7f7f7; padding: 1rem; border-radius: 4px; overflow-x: auto; }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago Yape - AutoCare Lubricantes</title>
+  <link rel="stylesheet" href="styles/estilos-global.css">
+  <!-- CSS del modal -->
+  <link rel="stylesheet" href="styles/pago-modal.css">
 </head>
 <body>
-  <div class="card">
-    <h1>Flujo de Pago con Yape (Simulado)</h1>
-    <p>Escribe el <code>orderId</code> de la orden que quieras probar.</p>
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <nav>
+        <a href="index.html" class="logo">AutoCare Lubricantes</a>
+        <ul class="nav-links">
+          <li><a href="index.html#productos">Productos</a></li>
+          <li><a href="index.html#servicios">Servicios</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <div class="nav-icons">
+          <a href="carrito.html" class="cart-icon">
+            🛒
+            <span class="cart-count">0</span>
+          </a>
+          <a href="#login" style="color:white; text-decoration:none;">👤</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="carrito.html">Carrito</a></li>
+        <li><a href="checkout.html">Checkout</a></li>
+        <li><span>Pago</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- STEPS INDICATOR -->
+  <div class="container" style="margin-top: 1rem; margin-bottom: 2rem;">
+    <div class="steps-container">
+      <div class="step completed">
+        <div class="step-number">✓</div>
+        <div class="step-label">Carrito</div>
+      </div>
+      <div class="step completed">
+        <div class="step-number">✓</div>
+        <div class="step-label">Datos</div>
+      </div>
+      <div class="step active">
+        <div class="step-number">3</div>
+        <div class="step-label">Pago</div>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-label">Confirmación</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="container" style="display: flex; justify-content: center; margin-bottom: 3rem;">
+    <div class="payment-container">
+      <!-- HEADER PAGO -->
+      <div class="payment-header">
+        <h1>💳 Pago con Yape</h1>
+        <p>Escanea el código QR o usa el número de cuenta</p>
+      </div>
+
+      <!-- BODY PAGO -->
+      <div class="payment-body">
+        <!-- TIMER -->
+        <div class="timer">
+          <div class="timer-icon">⏱️</div>
+          <div class="timer-content">
+            <div class="timer-label">Tiempo para confirmar pago</div>
+            <div class="timer-display" id="timer">10:00</div>
+          </div>
+        </div>
+
+        <!-- STATUS MESSAGE -->
+        <div class="status-message success" id="successMsg" style="display: none;">
+          ✓ Pago confirmado exitosamente
+        </div>
+        <div class="status-message error" id="errorMsg" style="display: none;">
+          ✗ Error en el pago. Intenta nuevamente
+        </div>
+
+        <!-- MÉTODO YAPE QR -->
+        <div class="section">
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-weight: 600;">Método 1: Código QR</h3>
+          <div class="qr-container">
+            <div class="qr-image">📱</div>
+            <div class="qr-instructions">
+              <strong>Instrucciones:</strong><br>
+              1. Abre tu app Yape<br>
+              2. Escanea el código QR<br>
+              3. Confirma el pago<br>
+              <span style="color: var(--success); font-weight: 600; margin-top: 0.5rem; display: block;">El pago se confirmará automáticamente</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MÉTODO NÚMERO CUENTA -->
+        <div class="section">
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-weight: 600;">Método 2: Número de Cuenta</h3>
+
+          <div class="account-info">
+            <div class="account-type">Billetera Yape</div>
+            <div class="account-number" style="font-family: monospace; letter-spacing: 0.2em;">+51 987 654 321</div>
+            <div class="account-holder">A nombre de: AutoCare Lubricantes</div>
+          </div>
+
+          <div class="qr-instructions" style="background: #fff3cd; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--warning);">
+            <strong>📋 Datos de la transferencia:</strong><br>
+            • Monto: <strong id="paymentAmount">S/ 0.00</strong><br>
+            • Concepto: Compra AutoCare #123456<br>
+            • Incluye IGV y envío<br>
+            <span style="color: #7f8c8d; font-size: 0.85rem; margin-top: 0.5rem; display: block;">⚠️ Después de transferir, presiona "Confirmar Pago"</span>
+          </div>
+        </div>
+
+        <!-- MÉTODOS ALTERNATIVOS -->
+        <div class="section">
+          <h3 style="color: var(--primary); margin-bottom: 1rem; font-weight: 600;">Otros Métodos de Pago</h3>
+
+          <div class="methods-grid" style="display: grid; gap: 0.75rem;">
+            <label class="method-card">
+              <input type="radio" name="paymentMethod" value="yape" checked>
+              <div style="text-align: left;">
+                <strong>💳 Yape</strong>
+                <p style="font-size: 0.85rem; color: #7f8c8d; margin: 0;">Billetera digital peruana</p>
+              </div>
+            </label>
+
+            <label class="method-card">
+              <input type="radio" name="paymentMethod" value="plin">
+              <div style="text-align: left;">
+                <strong>💰 PLIN</strong>
+                <p style="font-size: 0.85rem; color: #7f8c8d; margin: 0;">Transferencia entre bancos</p>
+              </div>
+            </label>
+
+            <label class="method-card">
+              <input type="radio" name="paymentMethod" value="card">
+              <div style="text-align: left;">
+                <strong>💳 Tarjeta de Crédito</strong>
+                <p style="font-size: 0.85rem; color: #7f8c8d; margin: 0;">Visa, Mastercard, Amex</p>
+              </div>
+            </label>
+
+            <label class="method-card">
+              <input type="radio" name="paymentMethod" value="bank">
+              <div style="text-align: left;">
+                <strong>🏦 Transferencia Bancaria</strong>
+                <p style="font-size: 0.85rem; color: #7f8c8d; margin: 0;">Deposito a cuenta corriente</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- RESUMEN PAGO -->
+        <div class="payment-details">
+          <div class="detail-row">
+            <span class="detail-label">Subtotal:</span>
+            <span class="detail-value" id="detailSubtotal">S/ 0.00</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Envío:</span>
+            <span class="detail-value" id="detailShipping">S/ 15.00</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">IGV (18%):</span>
+            <span class="detail-value" id="detailIGV">S/ 0.00</span>
+          </div>
+          <div class="detail-row" style="border-top: 1px solid #bdc3c7; padding-top: 0.75rem; margin-top: 0.75rem;">
+            <span class="detail-label" style="font-weight: 700; font-size: 1.1rem;">Total a Pagar:</span>
+            <span class="detail-value" style="font-weight: 700; font-size: 1.3rem; color: var(--accent);" id="detailTotal">S/ 0.00</span>
+          </div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="action-buttons">
+          <a href="checkout.html" class="btn-cancel">← Atrás</a>
+          <!-- ahora abre el modal -->
+          <button class="btn-confirm" onclick="confirmPayment()">Confirmar Pago ✓</button>
+        </div>
+
+        <!-- SEGURIDAD -->
+        <div style="background: #f0f4ff; border-radius: 8px; padding: 1rem; margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: #7f8c8d;">
+          🔒 Transacción 100% segura y encriptada<br>
+          <strong>SSL Certificate</strong> • Datos protegidos
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq">
+          <div class="faq-title">❓ Preguntas sobre Pago</div>
+          <div class="faq-item">
+            <div class="faq-question">¿Es seguro pagar con Yape?</div>
+            <div class="faq-answer">Sí, Yape utiliza encriptación de nivel bancario. Tus datos están protegidos.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">¿Cuánto tarda en confirmarse?</div>
+            <div class="faq-answer">El pago se confirma instantáneamente. Si no se confirma, contacta a soporte.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">¿Hay comisión adicional?</div>
+            <div class="faq-answer">No, el precio mostrado es final. Sin comisiones ocultas.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">¿Puedo cambiar de método?</div>
+            <div class="faq-answer">Sí, puedes cambiar antes de confirmar el pago.</div>
+          </div>
+        </div>
+
+        <!-- RESPUESTA API (para debug) -->
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL BACKEND -->
+<!-- MODAL BACKEND -->
+<div id="modalPago" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <h2>Simular pago con Yape</h2>
+    <p>Ingresa el <strong>ID de la orden</strong> que registraste en el sistema.</p>
 
     <p>
-      <strong>ID de Orden:</strong>
+      <label for="orderId" style="display:block; margin-bottom:0.25rem; font-size:0.85rem; color:#6b7280;">
+        ID de Orden
+      </label>
       <input type="number" id="orderId" placeholder="Ej: 300" />
     </p>
 
-    <button id="btnIniciar" class="btn btn-primary">1. Iniciar pago con Yape</button>
-    <button id="btnConfirmar" class="btn btn-secondary">2. Confirmar pago (aprobado)</button>
-    <button id="btnEstado" class="btn">3. Consultar estado de pago</button>
+    <div class="modal-actions">
+      <button id="btnIniciar" class="btn btn-primary">
+        1. Iniciar pago
+      </button>
+      <button id="btnConfirmar" class="btn btn-secondary">
+        2. Confirmar pago
+      </button>
+      <button id="btnEstado" class="btn">
+        3. Consultar estado
+      </button>
+    </div>
 
-    <h2>Respuesta de la API</h2>
+    <!-- SOLO UN PRE EN TODO EL DOCUMENTO -->
     <pre id="respuestaApi">[Aún sin respuesta]</pre>
   </div>
+</div>
+
+
+
+  <!-- FOOTER -->
+  <footer style="margin-top: 3rem;">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 AutoCare Lubricantes. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    const orderInput = document.getElementById('orderId');
-    const pre = document.getElementById('respuestaApi');
-    const btnIniciar = document.getElementById('btnIniciar');
-    const btnConfirmar = document.getElementById('btnConfirmar');
-    const btnEstado = document.getElementById('btnEstado');
+    // ------------ LÓGICA FRONT (total, timer) ------------
+    const mockProducts = {
+      1: { name: 'GTX 5W-30', brand: 'CASTROL', price: 85.90, icon: '🛢️' },
+      2: { name: 'Helix Ultra 0W-40', brand: 'SHELL', price: 135.00, icon: '🛢️' },
+      3: { name: 'Filtro PL14610', brand: 'PUROLATOR', price: 22.50, icon: '🔧' },
+      4: { name: 'Delvac 15W-40', brand: 'MOBIL', price: 98.50, icon: '💧' },
+      5: { name: 'Refrigerante Rojo', brand: 'CASTROL', price: 22.00, icon: '💧' },
+      6: { name: 'Kit Básico', brand: 'AUTOCARE', price: 110.00, icon: '📦' }
+    };
 
-    let ultimoOrderId = null;
+    function updatePaymentDetails() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // 1. Iniciar pago
-    btnIniciar.addEventListener('click', async () => {
-      const orderId = parseInt(orderInput.value, 10);
-      if (!orderId) {
-        alert('Ingresa un ID de orden válido');
+      const cartMap = {};
+      cart.forEach(item => {
+        if (!cartMap[item.id]) {
+          cartMap[item.id] = { ...item, quantity: 0 };
+        }
+        cartMap[item.id].quantity++;
+      });
+
+      let subtotal = 0;
+      Object.values(cartMap).forEach(item => {
+        const product = mockProducts[item.id];
+        if (!product) return;
+        subtotal += product.price * item.quantity;
+      });
+
+      const shipping = 15;
+      const igv = subtotal * 0.18;
+      const total = subtotal + shipping + igv;
+
+      document.getElementById('detailSubtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+      document.getElementById('detailShipping').textContent = `S/ ${shipping.toFixed(2)}`;
+      document.getElementById('detailIGV').textContent = `S/ ${igv.toFixed(2)}`;
+      document.getElementById('detailTotal').textContent = `S/ ${total.toFixed(2)}`;
+      document.getElementById('paymentAmount').textContent = `S/ ${total.toFixed(2)}`;
+
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      document.querySelector('.cart-count').textContent = cart.length;
+    }
+
+    function startTimer() {
+      let timeLeft = 600; // 10 minutos
+
+      const timerInterval = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        document.getElementById('timer').textContent =
+          `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          showError('Tiempo agotado. Por favor, intenta de nuevo.');
+        }
+        timeLeft--;
+      }, 1000);
+    }
+
+    // AHORA confirmPayment abre el modal en vez de redirigir
+    function confirmPayment() {
+      const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+      if (paymentMethod !== 'yape') {
+        alert('Por ahora solo se ha implementado la simulación para Yape.');
         return;
       }
-      ultimoOrderId = orderId;
+      modal.style.display = 'block';
+    }
 
-      try {
-        const resp = await fetch('http://localhost:3000/api/pagos/yape', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId })
-        });
+    function showError(message) {
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.textContent = '✗ ' + message;
+      errorMsg.style.display = 'block';
+    }
 
-        const data = await resp.json();
-        pre.textContent = 'INICIAR PAGO:\n' + JSON.stringify(data, null, 2);
-
-        if (!resp.ok) {
-          alert('Error al iniciar pago: ' + (data.error || 'desconocido'));
-          return;
-        }
-
-        console.log('configPago para Izipay (simulado):', data.configPago);
-      } catch (err) {
-        console.error(err);
-        pre.textContent = 'Error de red al iniciar pago';
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePaymentDetails();
+      startTimer();
     });
 
-    // 2. Confirmar pago (simulado aprobado)
-    btnConfirmar.addEventListener('click', async () => {
-      if (!ultimoOrderId) {
-        alert('Primero inicia un pago con un orderId');
-        return;
-      }
+    // ------------ LÓGICA MODAL + BACKEND ------------
+    const modal = document.getElementById('modalPago');
+    const closeModalSpan = document.getElementById('closeModal');
 
-      try {
-        const resp = await fetch('http://localhost:3000/api/pagos/yape/confirmacion', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: ultimoOrderId, resultado: 'aprobado' })
-        });
+    closeModalSpan.onclick = () => { modal.style.display = 'none'; };
+    window.onclick = (event) => {
+      if (event.target === modal) modal.style.display = 'none';
+    };
 
-        const data = await resp.json();
-        pre.textContent = 'CONFIRMAR PAGO:\n' + JSON.stringify(data, null, 2);
+const orderInput = document.getElementById('orderId');
+const pre = document.getElementById('respuestaApi');
+const btnIniciar = document.getElementById('btnIniciar');
+const btnConfirmar = document.getElementById('btnConfirmar');
+const btnEstado = document.getElementById('btnEstado');
 
-        if (!resp.ok) {
-          alert('Error al confirmar pago: ' + (data.error || 'desconocido'));
-        }
-      } catch (err) {
-        console.error(err);
-        pre.textContent = 'Error de red al confirmar pago';
-      }
+let ultimoOrderId = null;
+
+btnIniciar.addEventListener('click', async () => {
+  const orderId = parseInt(orderInput.value, 10);
+  if (!orderId) {
+    alert('Ingresa un ID de orden válido');
+    return;
+  }
+  ultimoOrderId = orderId;
+
+  try {
+    const resp = await fetch('http://localhost:3000/api/pagos/yape', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId })
     });
+    const data = await resp.json();
+    pre.textContent = 'INICIAR PAGO:\n' + JSON.stringify(data, null, 2);
+    if (!resp.ok) {
+      alert('Error al iniciar pago: ' + (data.error || 'desconocido'));
+    }
+  } catch (err) {
+    console.error(err);
+    pre.textContent = 'Error de red al iniciar pago';
+  }
+});
 
-    // 3. Consultar estado
-    btnEstado.addEventListener('click', async () => {
-      const orderId = parseInt(orderInput.value, 10);
-      if (!orderId) {
-        alert('Ingresa un ID de orden válido');
-        return;
-      }
-
-      try {
-        const resp = await fetch('http://localhost:3000/api/pagos/orden/' + orderId);
-        const data = await resp.json();
-        pre.textContent = 'ESTADO DE PAGO:\n' + JSON.stringify(data, null, 2);
-
-        if (!resp.ok) {
-          alert('Error al consultar estado: ' + (data.error || 'desconocido'));
-        }
-      } catch (err) {
-        console.error(err);
-        pre.textContent = 'Error de red al consultar estado';
-      }
+btnConfirmar.addEventListener('click', async () => {
+  if (!ultimoOrderId) {
+    alert('Primero inicia un pago con un orderId');
+    return;
+  }
+  try {
+    const resp = await fetch('http://localhost:3000/api/pagos/yape/confirmacion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId: ultimoOrderId, resultado: 'aprobado' })
     });
+    const data = await resp.json();
+    pre.textContent = 'CONFIRMAR PAGO:\n' + JSON.stringify(data, null, 2);
+    if (!resp.ok) {
+      alert('Error al confirmar pago: ' + (data.error || 'desconocido'));
+    }
+  } catch (err) {
+    console.error(err);
+    pre.textContent = 'Error de red al confirmar pago';
+  }
+});
+
+btnEstado.addEventListener('click', async () => {
+  const orderId = parseInt(orderInput.value, 10);
+  if (!orderId) {
+    alert('Ingresa un ID de orden válido');
+    return;
+  }
+  try {
+    const resp = await fetch('http://localhost:3000/api/pagos/orden/' + orderId);
+    const data = await resp.json();
+    pre.textContent = 'ESTADO DE PAGO:\n' + JSON.stringify(data, null, 2);
+    if (!resp.ok) {
+      alert('Error al consultar estado: ' + (data.error || 'desconocido'));
+    }
+  } catch (err) {
+    console.error(err);
+    pre.textContent = 'Error de red al consultar estado';
+  }
+});
+
   </script>
 </body>
 </html>

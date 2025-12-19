@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoCare Lubricantes - Inicio</title>
+    <link rel="stylesheet" href="styles/estilos-global.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">AutoCare Lubricantes</a>
+                <ul class="nav-links">
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#marcas">Marcas</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <a href="carrito.html" class="cart-icon">
+                        🛒
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="#login" style="color:white; text-decoration:none;">👤</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Lubricantes Automotrices de Calidad</h1>
+            <p>Mantén tu vehículo en óptimas condiciones con nuestros productos originales y servicios profesionales</p>
+            <a href="#productos" class="btn">Explorar Catálogo</a>
+            <a href="#servicios" class="btn btn-secondary" style="margin-left: 1rem;">Ver Servicios</a>
+        </div>
+    </section>
+
+    <!-- CATEGORÍAS -->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Nuestras Categorías</h2>
+            <div class="category-grid">
+                <div class="category-card" onclick="filterByCategory('gasolina')">
+                    <div class="category-icon">⛽</div>
+                    <h3>Aceites Gasolina</h3>
+                    <p>Para motores a gasolina</p>
+                    <button class="btn" style="font-size:0.9rem; padding:8px 16px;">Ver más</button>
+                </div>
+                <div class="category-card" onclick="filterByCategory('diesel')">
+                    <div class="category-icon">🚚</div>
+                    <h3>Aceites Diésel</h3>
+                    <p>Para motores pesados</p>
+                    <button class="btn" style="font-size:0.9rem; padding:8px 16px;">Ver más</button>
+                </div>
+                <div class="category-card" onclick="filterByCategory('filtros')">
+                    <div class="category-icon">🔧</div>
+                    <h3>Filtros</h3>
+                    <p>Filtros multimarca</p>
+                    <button class="btn" style="font-size:0.9rem; padding:8px 16px;">Ver más</button>
+                </div>
+                <div class="category-card" onclick="filterByCategory('fluidos')">
+                    <div class="category-icon">💧</div>
+                    <h3>Fluidos</h3>
+                    <p>Transmisión y frenos</p>
+                    <button class="btn" style="font-size:0.9rem; padding:8px 16px;">Ver más</button>
+                </div>
+                <div class="category-card" onclick="filterByCategory('aditivos')">
+                    <div class="category-icon">🧪</div>
+                    <h3>Aditivos</h3>
+                    <p>Tratamientos especiales</p>
+                    <button class="btn" style="font-size:0.9rem; padding:8px 16px;">Ver más</button>
+                </div>
+                <div class="category-card" onclick="filterByCategory('kits')">
+                    <div class="category-icon">📦</div>
+                    <h3>Kits Mantenimiento</h3>
+                    <p>Paquetes completos</p>
+                    <button class="btn" style="font-size:0.9rem; padding:8px 16px;">Ver más</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTOS DESTACADOS -->
+    <section class="products" id="productos">
+        <div class="container">
+            <h2 class="section-title">Productos Destacados</h2>
+            <div class="products-filter">
+                <button class="filter-btn active" onclick="filterByCategory('todos')">Todos</button>
+                <button class="filter-btn" onclick="filterByCategory('gasolina')">Aceites Gasolina</button>
+                <button class="filter-btn" onclick="filterByCategory('diesel')">Aceites Diésel</button>
+                <button class="filter-btn" onclick="filterByCategory('filtros')">Filtros</button>
+                <button class="filter-btn" onclick="filterByCategory('fluidos')">Fluidos</button>
+            </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        🛢️
+                        <span class="product-badge">-15%</span>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-brand">CASTROL</div>
+                        <div class="product-name">GTX 5W-30</div>
+                        <div class="product-description">Aceite mineral premium para motores a gasolina</div>
+                        <div class="product-price">
+                            <div>
+                                <div class="price-main">S/ 85.90</div>
+                                <div class="price-old">S/ 100.00</div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-cart-btn" onclick="addToCart(1)">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        🛢️
+                        <span class="product-badge">Nuevo</span>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-brand">SHELL</div>
+                        <div class="product-name">Helix Ultra 0W-40</div>
+                        <div class="product-description">Aceite sintético de alto performance</div>
+                        <div class="product-price">
+                            <div>
+                                <div class="price-main">S/ 135.00</div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-cart-btn" onclick="addToCart(2)">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        🔧
+                    </div>
+                    <div class="product-body">
+                        <div class="product-brand">PUROLATOR</div>
+                        <div class="product-name">Filtro PL14610</div>
+                        <div class="product-description">Filtro de aceite estándar multimarca</div>
+                        <div class="product-price">
+                            <div>
+                                <div class="price-main">S/ 22.50</div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-cart-btn" onclick="addToCart(3)">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        💧
+                        <span class="product-badge">Stock</span>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-brand">MOBIL</div>
+                        <div class="product-name">Delvac 15W-40</div>
+                        <div class="product-description">Aceite diésel para motores pesados</div>
+                        <div class="product-price">
+                            <div>
+                                <div class="price-main">S/ 98.50</div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-cart-btn" onclick="addToCart(4)">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        💧
+                    </div>
+                    <div class="product-body">
+                        <div class="product-brand">CASTROL</div>
+                        <div class="product-name">Refrigerante Rojo</div>
+                        <div class="product-description">Líquido de enfriamiento concentrado</div>
+                        <div class="product-price">
+                            <div>
+                                <div class="price-main">S/ 22.00</div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-cart-btn" onclick="addToCart(5)">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        📦
+                        <span class="product-badge">Popular</span>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-brand">AUTOCARE</div>
+                        <div class="product-name">Kit Básico</div>
+                        <div class="product-description">Aceite 4L + Filtro + Junta</div>
+                        <div class="product-price">
+                            <div>
+                                <div class="price-main">S/ 110.00</div>
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-cart-btn" onclick="addToCart(6)">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="services" id="servicios">
+        <div class="container">
+            <h2 class="section-title">Servicios Profesionales</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🔧</div>
+                    <h3>Cambio Aceite Básico</h3>
+                    <p>Incluye aceite 4L, filtro nuevo e inspección completa</p>
+                    <div class="service-price">S/ 99.90</div>
+                    <div class="service-time">⏱️ 30-45 minutos</div>
+                    <a href="checkout.html?service=basico" class="service-btn">Reservar</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">⭐</div>
+                    <h3>Cambio Sintético</h3>
+                    <p>Aceite premium sintético, filtro de calidad superior</p>
+                    <div class="service-price">S/ 159.90</div>
+                    <div class="service-time">⏱️ 45-60 minutos</div>
+                    <a href="checkout.html?service=sintetico" class="service-btn">Reservar</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🛠️</div>
+                    <h3>Mantenimiento Integral</h3>
+                    <p>Aceite + Filtro aire + Refrigerante + Inspección</p>
+                    <div class="service-price">S/ 189.90</div>
+                    <div class="service-time">⏱️ 90 minutos</div>
+                    <a href="checkout.html?service=integral" class="service-btn">Reservar</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🔩</div>
+                    <h3>Cambio Transmisión</h3>
+                    <p>Extracción, llenado y pruebas de funcionamiento</p>
+                    <div class="service-price">S/ 149.90</div>
+                    <div class="service-time">⏱️ 60 minutos</div>
+                    <a href="checkout.html?service=transmision" class="service-btn">Reservar</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🛑</div>
+                    <h3>Servicio Frenos</h3>
+                    <p>Inspección completa y cambio de fluido de frenos</p>
+                    <div class="service-price">S/ 79.90 - 149.90</div>
+                    <div class="service-time">⏱️ 45-90 minutos</div>
+                    <a href="checkout.html?service=frenos" class="service-btn">Reservar</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🔍</div>
+                    <h3>Inspección General</h3>
+                    <p>Revisión completa de tu vehículo</p>
+                    <div class="service-price">S/ 39.90</div>
+                    <div class="service-time">⏱️ 30 minutos</div>
+                    <a href="checkout.html?service=inspeccion" class="service-btn">Reservar</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARCAS -->
+    <section class="brands" id="marcas">
+        <div class="container">
+            <h2 class="section-title">Nuestras Marcas</h2>
+            <div class="brands-grid">
+                <div class="brand-item">
+                    <div class="brand-logo">CASTROL</div>
+                    <div class="brand-name">Castrol</div>
+                    <div class="brand-specialty">Sintéticos Premium</div>
+                </div>
+                <div class="brand-item">
+                    <div class="brand-logo">SHELL</div>
+                    <div class="brand-name">Shell</div>
+                    <div class="brand-specialty">Lubricantes Completos</div>
+                </div>
+                <div class="brand-item">
+                    <div class="brand-logo">MOBIL</div>
+                    <div class="brand-name">Mobil</div>
+                    <div class="brand-specialty">Performance</div>
+                </div>
+                <div class="brand-item">
+                    <div class="brand-logo">REPSOL</div>
+                    <div class="brand-name">Repsol</div>
+                    <div class="brand-specialty">Tecnología Europea</div>
+                </div>
+                <div class="brand-item">
+                    <div class="brand-logo">PUROLATOR</div>
+                    <div class="brand-name">Purolator</div>
+                    <div class="brand-specialty">Filtros de Calidad</div>
+                </div>
+                <div class="brand-item">
+                    <div class="brand-logo">VISTONY</div>
+                    <div class="brand-name">Vistony</div>
+                    <div class="brand-specialty">Local Peruana</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Suscríbete a Nuestro Newsletter</h2>
+            <p style="margin-bottom: 1rem;">Recibe ofertas exclusivas y consejos de mantenimiento</p>
+            <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+                <input type="email" placeholder="Tu correo electrónico" required>
+                <button type="submit">Suscribirse</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Sobre AutoCare</h3>
+                    <ul>
+                        <li><a href="#">Quiénes somos</a></li>
+                        <li><a href="#">Misión y Visión</a></li>
+                        <li><a href="#">Galería</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Productos</h3>
+                    <ul>
+                        <li><a href="#">Aceites</a></li>
+                        <li><a href="#">Filtros</a></li>
+                        <li><a href="#">Fluidos</a></li>
+                        <li><a href="#">Aditivos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Servicios</h3>
+                    <ul>
+                        <li><a href="#">Cambio de Aceite</a></li>
+                        <li><a href="#">Mantenimiento</a></li>
+                        <li><a href="#">Diagnóstico</a></li>
+                        <li><a href="#">Garantía</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <ul>
+                        <li>📍 Calle Principal 123</li>
+                        <li>📞 (01) 555-1234</li>
+                        <li>📧 info@autocare.com</li>
+                        <li>🕐 Lun-Sab 8:00 - 18:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AutoCare Lubricantes. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function addToCart(productId) {
+            const product = {
+                id: productId,
+                quantity: 1,
+                addedAt: new Date()
+            };
+            cart.push(product);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            alert('Producto agregado al carrito');
+        }
+
+        function updateCartCount() {
+            const count = cart.length;
+            document.querySelector('.cart-count').textContent = count;
+        }
+
+        function filterByCategory(category) {
+            console.log('Filtrar por:', category);
+        }
+
+        function handleNewsletterSubmit(event) {
+            event.preventDefault();
+            alert('¡Gracias por suscribirte!');
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCartCount);
+    </script>
+</body>
+</html>

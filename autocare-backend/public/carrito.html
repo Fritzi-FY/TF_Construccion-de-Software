@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - AutoCare Lubricantes</title>
+    <link rel="stylesheet" href="styles/estilos-global.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">AutoCare Lubricantes</a>
+                <ul class="nav-links">
+                    <li><a href="index.html#productos">Productos</a></li>
+                    <li><a href="index.html#servicios">Servicios</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <a href="carrito.html" class="cart-icon">
+                        🛒
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="#login" style="color:white; text-decoration:none;">👤</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Inicio</a></li>
+                <li><span>Mi Carrito</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PAGE TITLE -->
+    <div class="page-title">
+        <div class="container">
+            <h1>Mi Carrito de Compras</h1>
+            <p>Revisa y modifica los productos antes de continuar</p>
+        </div>
+    </div>
+
+    <!-- CARRITO CONTENT -->
+    <div class="container">
+        <div id="cartContent"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 AutoCare Lubricantes. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mockProducts = {
+            1: { name: 'GTX 5W-30', brand: 'CASTROL', price: 85.90, icon: '🛢️' },
+            2: { name: 'Helix Ultra 0W-40', brand: 'SHELL', price: 135.00, icon: '🛢️' },
+            3: { name: 'Filtro PL14610', brand: 'PUROLATOR', price: 22.50, icon: '🔧' },
+            4: { name: 'Delvac 15W-40', brand: 'MOBIL', price: 98.50, icon: '💧' },
+            5: { name: 'Refrigerante Rojo', brand: 'CASTROL', price: 22.00, icon: '💧' },
+            6: { name: 'Kit Básico', brand: 'AUTOCARE', price: 110.00, icon: '📦' }
+        };
+
+        function renderCart() {
+            const cartContent = document.getElementById('cartContent');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="cart-empty">
+                        <div class="cart-empty-icon">🛒</div>
+                        <h2>Tu carrito está vacío</h2>
+                        <p>Explora nuestro catálogo y agrega productos</p>
+                        <a href="index.html" class="continue-btn">Continuar Comprando</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const cartMap = {};
+            cart.forEach(item => {
+                if (!cartMap[item.id]) {
+                    cartMap[item.id] = { ...item, quantity: 0 };
+                }
+                cartMap[item.id].quantity++;
+            });
+
+            const cartArray = Object.values(cartMap);
+            const subtotal = cartArray.reduce((sum, item) => {
+                const product = mockProducts[item.id];
+                return sum + (product.price * item.quantity);
+            }, 0);
+
+            const shipping = subtotal > 200 ? 0 : 15;
+            const igv = subtotal * 0.18;
+            const total = subtotal + shipping + igv;
+
+            let cartHTML = `
+                <div class="cart-layout">
+                    <div class="cart-items">
+                        <h2 style="color: var(--primary); margin-bottom: 1.5rem; font-size: 1.3rem;">
+                            Productos (${cartArray.length})
+                        </h2>
+            `;
+
+            cartArray.forEach(item => {
+                const product = mockProducts[item.id];
+                const itemTotal = product.price * item.quantity;
+
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="item-image">${product.icon}</div>
+                        <div class="item-details">
+                            <div class="item-brand">${product.brand}</div>
+                            <div class="item-name">${product.name}</div>
+                            <div class="item-price">S/ ${product.price.toFixed(2)}</div>
+                            <div class="item-quantity">
+                                <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                                <input type="number" class="qty-input" value="${item.quantity}" readonly>
+                                <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                            <div class="item-actions">
+                                <span class="item-remove" onclick="removeFromCart(${item.id})">🗑️ Eliminar</span>
+                                <span style="color: #bdc3c7;">Total: S/ ${itemTotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartHTML += `
+                    </div>
+                    <div class="cart-summary">
+                        <div class="summary-title">Resumen de Compra</div>
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal</span>
+                            <span class="summary-value">S/ ${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Envío</span>
+                            <span class="summary-value">${shipping === 0 ? 'Gratis' : 'S/ ' + shipping.toFixed(2)}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">IGV (18%)</span>
+                            <span class="summary-value">S/ ${igv.toFixed(2)}</span>
+                        </div>
+                        <div class="summary-total">
+                            <span class="total-label">Total</span>
+                            <span class="total-value">S/ ${total.toFixed(2)}</span>
+                        </div>
+
+                        <div class="promo-code">
+                            <div class="promo-input">
+                                <input type="text" placeholder="Código promocional" id="promoCode">
+                                <button onclick="applyPromo()">Aplicar</button>
+                            </div>
+                        </div>
+
+                        <a href="checkout.html" class="checkout-btn">Continuar al Checkout</a>
+                        <a href="index.html" class="continue-btn">Continuar Comprando</a>
+                    </div>
+                </div>
+            `;
+
+            cartContent.innerHTML = cartHTML;
+            updateCartCount();
+        }
+
+        function updateQuantity(productId, change) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const productCart = cart.filter(item => item.id == productId);
+
+            if (change === -1 && productCart.length > 0) {
+                cart = cart.filter((item, index) => !(item.id == productId && index === cart.indexOf(productCart[0])));
+            } else if (change === 1) {
+                cart.push({ id: productId, quantity: 1, addedAt: new Date() });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function removeFromCart(productId) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.id != productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.querySelector('.cart-count').textContent = cart.length;
+        }
+
+        function applyPromo() {
+            alert('Código promocional aplicado');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderCart);
+    </script>
+</body>
+</html>

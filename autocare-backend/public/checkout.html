@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - AutoCare Lubricantes</title>
+    <link rel="stylesheet" href="styles/estilos-global.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">AutoCare Lubricantes</a>
+                <ul class="nav-links">
+                    <li><a href="index.html#productos">Productos</a></li>
+                    <li><a href="index.html#servicios">Servicios</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <a href="carrito.html" class="cart-icon">
+                        🛒
+                        <span class="cart-count">0</span>
+                    </a>
+                    <a href="#login" style="color:white; text-decoration:none;">👤</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="carrito.html">Carrito</a></li>
+                <li><span>Checkout</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- PAGE TITLE -->
+    <div class="page-title">
+        <div class="container">
+            <h1>Finalizar Compra</h1>
+            <p>Completa tus datos para procesar el pedido</p>
+        </div>
+    </div>
+
+    <!-- STEPS INDICATOR -->
+    <div class="container" style="margin-top: 2rem;">
+        <div class="steps-container">
+            <div class="step completed">
+                <div class="step-number">✓</div>
+                <div class="step-label">Carrito</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Datos</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">Pago</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-label">Confirmación</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT CONTENT -->
+    <div class="container">
+        <div class="checkout-content">
+            <!-- FORMULARIO IZQUIERDA -->
+            <div>
+                <!-- DATOS PERSONALES -->
+                <div class="form-section">
+                    <h2 class="form-section-title">📋 Datos Personales</h2>
+                    <form id="checkoutForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Nombres</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Apellidos</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dni">DNI/RUC</label>
+                            <input type="text" id="dni" name="dni" required>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- DIRECCIÓN DE ENVÍO -->
+                <div class="form-section">
+                    <h2 class="form-section-title">🏠 Dirección de Envío</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="address">Dirección</label>
+                            <input type="text" id="address" name="address" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">Ciudad</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">Provincia</label>
+                                <input type="text" id="state" name="state" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zip">Código Postal</label>
+                                <input type="text" id="zip" name="zip" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">País</label>
+                                <select id="country" name="country" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="PE">Perú</option>
+                                    <option value="BO">Bolivia</option>
+                                    <option value="CL">Chile</option>
+                                    <option value="CO">Colombia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="instructions">Instrucciones de Entrega (Opcional)</label>
+                            <textarea id="instructions" name="instructions" rows="3" placeholder="Ej: Llamar antes de llegar..."></textarea>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="sameAddress" name="sameAddress">
+                            <label for="sameAddress">Usar la misma dirección para facturación</label>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- MÉTODO DE ENVÍO -->
+                <div class="form-section">
+                    <h2 class="form-section-title">🚚 Método de Envío</h2>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <label class="method-card" style="text-align: left; display: flex; align-items: center; gap: 1rem;">
+                            <input type="radio" name="shipping" value="standard" checked>
+                            <div>
+                                <div style="font-weight: 600; color: var(--primary);">Envío Estándar</div>
+                                <div style="font-size: 0.85rem; color: #7f8c8d;">5-7 días hábiles</div>
+                                <div style="font-size: 1.1rem; font-weight: 700; color: var(--secondary); margin-top: 0.25rem;">S/ 15.00</div>
+                            </div>
+                        </label>
+
+                        <label class="method-card" style="text-align: left; display: flex; align-items: center; gap: 1rem;">
+                            <input type="radio" name="shipping" value="express">
+                            <div>
+                                <div style="font-weight: 600; color: var(--primary);">Envío Express</div>
+                                <div style="font-size: 0.85rem; color: #7f8c8d;">2-3 días hábiles</div>
+                                <div style="font-size: 1.1rem; font-weight: 700; color: var(--secondary); margin-top: 0.25rem;">S/ 35.00</div>
+                            </div>
+                        </label>
+
+                        <label class="method-card" style="text-align: left; display: flex; align-items: center; gap: 1rem;">
+                            <input type="radio" name="shipping" value="pickup">
+                            <div>
+                                <div style="font-weight: 600; color: var(--primary);">Retiro en Tienda</div>
+                                <div style="font-size: 0.85rem; color: #7f8c8d;">Disponible hoy</div>
+                                <div style="font-size: 1.1rem; font-weight: 700; color: var(--success); margin-top: 0.25rem;">GRATIS</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESUMEN DERECHA -->
+            <div>
+                <div class="order-summary form-section" style="position: sticky; top: 120px;">
+                    <h2 class="form-section-title">📦 Resumen del Pedido</h2>
+
+                    <div id="orderItems" style="margin-bottom: 1.5rem; border-bottom: 1px solid #ecf0f1; padding-bottom: 1.5rem;">
+                        <!-- Items renderizados por JS -->
+                    </div>
+
+                    <div class="summary-row">
+                        <span class="summary-label">Subtotal</span>
+                        <span class="summary-value" id="summarySubtotal">S/ 0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Envío</span>
+                        <span class="summary-value" id="summaryShipping">S/ 15.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">IGV (18%)</span>
+                        <span class="summary-value" id="summaryIGV">S/ 0.00</span>
+                    </div>
+
+                    <div class="summary-total">
+                        <span class="total-label">Total</span>
+                        <span class="total-value" id="summaryTotal">S/ 0.00</span>
+                    </div>
+
+                    <div class="action-buttons">
+                        <a href="carrito.html" class="btn-cancel">← Atrás</a>
+                        <a href="pago-yape.html" class="btn-confirm">Continuar →</a>
+                    </div>
+
+                    <div class="faq">
+                        <div class="faq-title">❓ Preguntas Frecuentes</div>
+                        <div class="faq-item">
+                            <div class="faq-question">¿Cuál es el tiempo de entrega?</div>
+                            <div class="faq-answer">Estándar 5-7 días, Express 2-3 días desde la confirmación.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">¿Puedo cambiar el método de envío?</div>
+                            <div class="faq-answer">Sí, hasta 24 horas después de realizar el pedido.</div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">¿Qué pasa si hay cambios?</div>
+                            <div class="faq-answer">Contacta a soporte, reembolsamos la diferencia.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer style="margin-top: 3rem;">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 AutoCare Lubricantes. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mockProducts = {
+            1: { name: 'GTX 5W-30', brand: 'CASTROL', price: 85.90, icon: '🛢️' },
+            2: { name: 'Helix Ultra 0W-40', brand: 'SHELL', price: 135.00, icon: '🛢️' },
+            3: { name: 'Filtro PL14610', brand: 'PUROLATOR', price: 22.50, icon: '🔧' },
+            4: { name: 'Delvac 15W-40', brand: 'MOBIL', price: 98.50, icon: '💧' },
+            5: { name: 'Refrigerante Rojo', brand: 'CASTROL', price: 22.00, icon: '💧' },
+            6: { name: 'Kit Básico', brand: 'AUTOCARE', price: 110.00, icon: '📦' }
+        };
+
+        function updateOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const orderItemsDiv = document.getElementById('orderItems');
+            
+            const cartMap = {};
+            cart.forEach(item => {
+                if (!cartMap[item.id]) {
+                    cartMap[item.id] = { ...item, quantity: 0 };
+                }
+                cartMap[item.id].quantity++;
+            });
+
+            let itemsHTML = '';
+            let subtotal = 0;
+
+            Object.values(cartMap).forEach(item => {
+                const product = mockProducts[item.id];
+                const itemTotal = product.price * item.quantity;
+                subtotal += itemTotal;
+
+                itemsHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <div style="font-weight: 600; color: var(--primary);">${product.name}</div>
+                            <div style="font-size: 0.85rem; color: #7f8c8d;">${product.brand} x${item.quantity}</div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary);">S/ ${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            const shippingCost = 15;
+            const igv = subtotal * 0.18;
+            const total = subtotal + shippingCost + igv;
+
+            orderItemsDiv.innerHTML = itemsHTML;
+            document.getElementById('summarySubtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+            document.getElementById('summaryShipping').textContent = `S/ ${shippingCost.toFixed(2)}`;
+            document.getElementById('summaryIGV').textContent = `S/ ${igv.toFixed(2)}`;
+            document.getElementById('summaryTotal').textContent = `S/ ${total.toFixed(2)}`;
+
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.querySelector('.cart-count').textContent = cart.length;
+        }
+
+        document.addEventListener('DOMContentLoaded', updateOrderSummary);
+    </script>
+</body>
+</html>
