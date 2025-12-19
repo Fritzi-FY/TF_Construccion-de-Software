@@ -4,62 +4,117 @@
   <meta charset="UTF-8" />
   <title>Pago con Yape - AutoCare</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; }
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: 2rem auto; }
     .card { border: 1px solid #ddd; padding: 1.5rem; border-radius: 8px; }
-    .btn { padding: .7rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; }
+    .btn { padding: .7rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; margin-right: .5rem; }
     .btn-primary { background: #5c6bc0; color: #fff; }
+    .btn-secondary { background: #9e9e9e; color: #fff; }
     pre { background: #f7f7f7; padding: 1rem; border-radius: 4px; overflow-x: auto; }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>Pago con Yape vía Izipay</h1>
-    <p>Esta página de prueba llama a la API <code>/api/pagos/yape</code> y muestra la configuración de pago que luego usará el formulario de Izipay.</p>
+    <h1>Flujo de Pago con Yape (Simulado)</h1>
+    <p>Escribe el <code>orderId</code> de la orden que quieras probar.</p>
 
-    <label for="orderId">ID de Orden:</label>
-    <input type="number" id="orderId" value="7" />
+    <p>
+      <strong>ID de Orden:</strong>
+      <input type="number" id="orderId" placeholder="Ej: 300" />
+    </p>
 
-    <button id="btnPagar" class="btn btn-primary">Iniciar pago con Yape</button>
+    <button id="btnIniciar" class="btn btn-primary">1. Iniciar pago con Yape</button>
+    <button id="btnConfirmar" class="btn btn-secondary">2. Confirmar pago (aprobado)</button>
+    <button id="btnEstado" class="btn">3. Consultar estado de pago</button>
 
     <h2>Respuesta de la API</h2>
     <pre id="respuestaApi">[Aún sin respuesta]</pre>
   </div>
 
   <script>
-    const btn = document.getElementById('btnPagar');
-    const pre = document.getElementById('respuestaApi');
     const orderInput = document.getElementById('orderId');
+    const pre = document.getElementById('respuestaApi');
+    const btnIniciar = document.getElementById('btnIniciar');
+    const btnConfirmar = document.getElementById('btnConfirmar');
+    const btnEstado = document.getElementById('btnEstado');
 
-    btn.addEventListener('click', async () => {
+    let ultimoOrderId = null;
+
+    // 1. Iniciar pago
+    btnIniciar.addEventListener('click', async () => {
       const orderId = parseInt(orderInput.value, 10);
+      if (!orderId) {
+        alert('Ingresa un ID de orden válido');
+        return;
+      }
+      ultimoOrderId = orderId;
 
+      try {
+        const resp = await fetch('http://localhost:3000/api/pagos/yape', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId })
+        });
+
+        const data = await resp.json();
+        pre.textContent = 'INICIAR PAGO:\n' + JSON.stringify(data, null, 2);
+
+        if (!resp.ok) {
+          alert('Error al iniciar pago: ' + (data.error || 'desconocido'));
+          return;
+        }
+
+        console.log('configPago para Izipay (simulado):', data.configPago);
+      } catch (err) {
+        console.error(err);
+        pre.textContent = 'Error de red al iniciar pago';
+      }
+    });
+
+    // 2. Confirmar pago (simulado aprobado)
+    btnConfirmar.addEventListener('click', async () => {
+      if (!ultimoOrderId) {
+        alert('Primero inicia un pago con un orderId');
+        return;
+      }
+
+      try {
+        const resp = await fetch('http://localhost:3000/api/pagos/yape/confirmacion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: ultimoOrderId, resultado: 'aprobado' })
+        });
+
+        const data = await resp.json();
+        pre.textContent = 'CONFIRMAR PAGO:\n' + JSON.stringify(data, null, 2);
+
+        if (!resp.ok) {
+          alert('Error al confirmar pago: ' + (data.error || 'desconocido'));
+        }
+      } catch (err) {
+        console.error(err);
+        pre.textContent = 'Error de red al confirmar pago';
+      }
+    });
+
+    // 3. Consultar estado
+    btnEstado.addEventListener('click', async () => {
+      const orderId = parseInt(orderInput.value, 10);
       if (!orderId) {
         alert('Ingresa un ID de orden válido');
         return;
       }
 
       try {
-        const resp = await fetch('http://localhost:3000/api/pagos/yape', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ orderId })
-        });
-
+        const resp = await fetch('http://localhost:3000/api/pagos/orden/' + orderId);
         const data = await resp.json();
-        pre.textContent = JSON.stringify(data, null, 2);
+        pre.textContent = 'ESTADO DE PAGO:\n' + JSON.stringify(data, null, 2);
 
         if (!resp.ok) {
-          alert('Error desde la API: ' + (data.error || 'desconocido'));
-          return;
+          alert('Error al consultar estado: ' + (data.error || 'desconocido'));
         }
-
-        // Aquí en el futuro inicializarás el formulario de Izipay usando data.configPago
-        console.log('ConfigPago listo para Izipay:', data.configPago);
       } catch (err) {
         console.error(err);
-        pre.textContent = 'Error de red o del servidor';
+        pre.textContent = 'Error de red al consultar estado';
       }
     });
   </script>
