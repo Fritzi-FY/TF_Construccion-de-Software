@@ -62,4 +62,51 @@ router.get('/orden/:id', async (req, res) => {
 
 });
 
+// POST /api/pagos/yape/confirmacion
+// Body: { "orderId": 7, "resultado": "aprobado" | "rechazado" }
+router.post('/yape/confirmacion', async (req, res) => {
+  try {
+    const { orderId, resultado } = req.body;
+
+    if (!orderId || !resultado) {
+      return res.status(400).json({ error: 'orderId y resultado son requeridos' });
+    }
+
+    const orden = await repoOrdenes.obtenerPorId(orderId);
+    if (!orden) {
+      return res.status(404).json({ error: 'Orden no encontrada' });
+    }
+
+    let nuevoEstadoPago;
+    let nuevoEstadoTx;
+
+    if (resultado === 'aprobado') {
+      nuevoEstadoPago = 'pagada';
+      nuevoEstadoTx = 'completada';
+    } else if (resultado === 'rechazado') {
+      nuevoEstadoPago = 'rechazada';
+      nuevoEstadoTx = 'fallida';
+    } else {
+      return res.status(400).json({ error: 'resultado debe ser "aprobado" o "rechazado"' });
+    }
+
+    // Actualizar orden
+    await repoOrdenes.actualizarEstadoPago(orderId, nuevoEstadoPago);
+
+    // Actualizar transacción más reciente de esa orden
+    await repoTransacciones.actualizarEstadoTransaccionPorOrden(orderId, nuevoEstadoTx);
+
+    return res.status(200).json({
+      mensaje: 'Pago actualizado correctamente',
+      orderId,
+      estadoPago: nuevoEstadoPago,
+      estadoTransaccion: nuevoEstadoTx
+    });
+  } catch (err) {
+    console.error('Error al confirmar pago Yape:', err);
+    return res.status(500).json({ error: 'No se pudo confirmar el pago con Yape' });
+  }
+});
+
+
 module.exports = router;

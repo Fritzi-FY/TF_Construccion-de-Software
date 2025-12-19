@@ -33,6 +33,18 @@ class RepositorioOrdenesSql {
       WHERE id = @id
     `);
   }
+
+    async actualizarEstadoPago(orderId, nuevoEstado) {
+    const pool = await poolPromise;
+    await pool.request()
+      .input('id', orderId)
+      .input('estado_pago', nuevoEstado)
+      .query(`
+        UPDATE orders
+        SET estado_pago = @estado_pago
+        WHERE id = @id
+      `);
+  }
 }
 
 module.exports = RepositorioOrdenesSql;

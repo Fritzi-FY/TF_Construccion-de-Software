@@ -24,6 +24,23 @@ class RepositorioTransaccionesSql {
 
     return { id: result.recordset[0].id };
   }
+
+  async actualizarEstadoTransaccionPorOrden(orderId, nuevoEstado) {
+  const pool = await poolPromise;
+  await pool.request()
+    .input('order_id', orderId)
+    .input('estado', nuevoEstado)
+    .query(`
+      UPDATE transaction_history
+      SET estado = @estado
+      WHERE id = (
+        SELECT TOP 1 id
+        FROM transaction_history
+        WHERE order_id = @order_id
+        ORDER BY created_at DESC
+      )
+    `);
+  }
 }
 
 module.exports = RepositorioTransaccionesSql;
